@@ -52,11 +52,12 @@ export default function Home() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (query.trim()) {
-      router.push(`/cards/${encodeURIComponent(query)}`);
-    }
-  };
+  e.preventDefault();
+  if (query.trim()) {
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  }
+};
+
 
   return (
     <div style={{ padding: '2rem' }}>
@@ -131,7 +132,7 @@ export default function Home() {
 
       <div style={{ height: '1500px', background: '#000000' }}>
         <p style={{ color: '#ffffff', padding: '1rem' }}>
-          Start Typing...
+          
         </p>
       </div>
     </div>
