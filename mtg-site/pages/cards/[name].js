@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 export async function getServerSideProps(context) {
   const { name } = context.params;
   const res = await fetch(`https://api.scryfall.com/cards/named?fuzzy=${name}`);
@@ -9,6 +11,19 @@ export async function getServerSideProps(context) {
 }
 
 export default function CardPage({ card }) {
+  useEffect(() => {
+    if (card && card.object !== 'error') {
+      let recent = JSON.parse(localStorage.getItem('recentCards') || '[]');
+      // Remove if already exists
+      recent = recent.filter((n) => n.name !== card.name);
+      // Add to front
+      recent.unshift({ name: card.name, image: card.image_uris?.small });
+      // Keep only 5
+      recent = recent.slice(0, 5);
+      localStorage.setItem('recentCards', JSON.stringify(recent));
+    }
+  }, [card]);
+
   if (card.object === 'error') {
     return <div>Card not found. Try another name.</div>;
   }
@@ -30,7 +45,13 @@ export default function CardPage({ card }) {
             <li>TCGPlayer (USD): ${card.prices.usd || 'N/A'}</li>
             <li>Cardmarket (EUR): €{card.prices.eur || 'N/A'}</li>
         </ul>
-      <a href="/">Search another card</a>
+      <h3>
+        <a href="/" style={{ textDecoration: 'underline' }}>
+          <strong>
+            <em>Search another card</em>
+          </strong>
+        </a>
+      </h3>
     </div>
   );
 }
