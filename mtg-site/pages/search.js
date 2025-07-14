@@ -23,7 +23,37 @@ export default function SearchResults() {
   }, [q]);
 
   if (!q) return <p>No search term provided.</p>;
-  if (loading) return <p>Loading results for "{q}"...</p>;
+  if (loading) {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '50vh',
+      flexDirection: 'column',
+    }}>
+      <div className="spinner" />
+      <p>Loading results for "{q}"...</p>
+      <style jsx>{`
+        .spinner {
+          border: 6px solid #eee;
+          border-top: 6px solid #0070f3;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          animation: spin 1s linear infinite;
+          margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
   if (results.length === 0) return <p>No cards found for "{q}".</p>;
 
   return (
